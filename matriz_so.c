@@ -64,21 +64,19 @@ int main(int argc, char **argv){
       id = fork();
 
       //processo filho
-      if (id == 0){  
+    if (id == 0){  
         pid = wait(&status);
-        for (i = aux; i < m; i++){
-          for (j = aux; j < n; j++){
-            int aux2 = 0;
-            for (k = 0; k < m; k++){
-                aux2 += A[j][k] * B[k][i];
-            }
-
+          int aux2 = 0;
+            for (k = 0; k < m; k++)
+                aux2 += A[aux2][k] * B[k][aux2];
+            
             matrizSolucao[i][j] = aux2;  
-          }
-        }
+            
+            kill(id);
+    }
         
       
-        kill(id);
+    
 
       }else//processo pai
         printMatriz(matrizSolucao, m, n);
