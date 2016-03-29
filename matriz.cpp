@@ -21,7 +21,7 @@ class Matriz{
 			 	for(int j=0;j<a->n;j++){
 						args[i][j].linha=i;
 						args[i][j].coluna=j;
-						args[i][j].k_max=3;
+						args[i][j].k_max=a->m;
 						args[i][j].a=a->matriz;
 						args[i][j].b=b->matriz;
 						args[i][j].resultado=resultado->matriz;
@@ -96,19 +96,15 @@ int main(){
 
 
 	Matriz *a = new Matriz(5,5);
+
 	Matriz *b = new Matriz(5,5);
-	b->preencheIdentidade();
+	//b->preencheIdentidade();
+
 	Matriz *resultado = new Matriz(5,5);
-
-
-	for(int i=0;i<3;i++){
-		for(int j=0;j<3;j++){
-			resultado->matriz[i][j]=0;	
-		}
-	}
-
+	resultado->preencheNula();
 
 	a->chamaThread(a,b,resultado);
+
 	printaMatriz(resultado->matriz,5,5);
 
 	return 0;
