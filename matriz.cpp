@@ -1,39 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
-
-int threadsGlobaisMagicasFelizes=0;
-
-typedef struct{
-		int linha,coluna,k_max;
-		int** a;
-		int** b;
-		int** resultado;
-}thread_arg,*ptr_thread_arg;
-
-
-
-void *calculaElemento (void *parameter){
-			ptr_thread_arg targ = (ptr_thread_arg)parameter;
-
-			printf("Disparei a Thread %d que magicamente funciona. \n",threadsGlobaisMagicasFelizes);
-			for(int k=0;k<targ->k_max;k++){
-			 	targ->resultado[targ->linha][targ->coluna]+=(targ->a[targ->linha][k])*(targ->b[k][targ->coluna]);
-			}
-
-			threadsGlobaisMagicasFelizes++;
-		}
-
-void printaMatriz(int **a,int m,int n){
-	for(int i=0;i<m;i++){
-		for(int j=0;j<n;j++){
-			printf("%d ",a[i][j]);	
-		}
-		printf("\n");
-	}
-
-	printf("\n");
-}
+#include "matriz.h"
 
 class Matriz{
 	public:
@@ -42,6 +10,7 @@ class Matriz{
 		void multiplicaMatriz(Matriz *a,Matriz *b,Matriz *c);
 		void preencheMatriz();
 		void preencheIdentidade();
+		void preencheNula();
 
 		void chamaThread (Matriz *a,Matriz *b,Matriz *resultado){
 
@@ -90,7 +59,6 @@ void Matriz::multiplicaMatriz (Matriz *a,Matriz *b,Matriz *c){
 }
 
 
-
 void Matriz::preencheMatriz(){
 	int contador=1;
 
@@ -98,6 +66,15 @@ void Matriz::preencheMatriz(){
 		for(int j=0;j<this->n;j++){
 			this->matriz[i][j]=contador;
 			contador++;
+		}
+	}
+}
+
+void Matriz::preencheNula(){
+
+	for (int i=0;i<this->m;i++){
+		for(int j=0;j<this->n;j++){
+			this->matriz[i][j]=0;
 		}
 	}
 }
@@ -118,10 +95,10 @@ void Matriz::preencheIdentidade(){
 int main(){
 
 
-	Matriz *a = new Matriz(10,10);
-	Matriz *b = new Matriz(10,10);
+	Matriz *a = new Matriz(5,5);
+	Matriz *b = new Matriz(5,5);
 	b->preencheIdentidade();
-	Matriz *resultado = new Matriz(10,10);
+	Matriz *resultado = new Matriz(5,5);
 
 
 	for(int i=0;i<3;i++){
@@ -132,7 +109,7 @@ int main(){
 
 
 	a->chamaThread(a,b,resultado);
-	printaMatriz(resultado->matriz,10,10);
+	printaMatriz(resultado->matriz,5,5);
 
 	return 0;
 }
