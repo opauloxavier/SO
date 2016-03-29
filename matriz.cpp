@@ -11,6 +11,7 @@ class Matriz{
 		void preencheMatriz();
 		void preencheIdentidade();
 		void preencheNula();
+		void printaMatriz();
 
 		void chamaThread (Matriz *a,Matriz *b,Matriz *resultado){
 
@@ -92,20 +93,30 @@ void Matriz::preencheIdentidade(){
 	}
 }
 
-int main(){
+void Matriz::printaMatriz(){
+	for(int i=0;i<this->m;i++){
+		for(int j=0;j<this->n;j++){
+			printf("%d ",matriz[i][j]);	
+		}
+		printf("\n");
+	}
 
+	printf("\n");
+}
+
+int main(){
 
 	Matriz *a = new Matriz(5,5);
 
 	Matriz *b = new Matriz(5,5);
-	//b->preencheIdentidade();
+	b->preencheIdentidade();
 
 	Matriz *resultado = new Matriz(5,5);
 	resultado->preencheNula();
 
 	a->chamaThread(a,b,resultado);
 
-	printaMatriz(resultado->matriz,5,5);
+	resultado->printaMatriz();
 
 	return 0;
 }

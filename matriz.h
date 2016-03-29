@@ -18,13 +18,3 @@ void *calculaElemento (void *parameter){
 		threadsGlobaisMagicasFelizes++;
 	}
 
-void printaMatriz(int **a,int m,int n){
-	for(int i=0;i<m;i++){
-		for(int j=0;j<n;j++){
-			printf("%d ",a[i][j]);	
-		}
-		printf("\n");
-	}
-
-	printf("\n");
-}
