@@ -8,7 +8,7 @@
 //parametros m, n, qt de processos
 
 void printMatriz(int **matriz, int m, int n){
-    int i, j, k;
+    int i, j;
     
     printf("\n");
     
@@ -18,7 +18,6 @@ void printMatriz(int **matriz, int m, int n){
         
         printf("\n");
     }
-    
 }
 
 
@@ -43,7 +42,7 @@ int main(int argc, char **argv){
         for (j = 0; j < n; j++){        
             k = j * m + i;
 
-            A[i][j] = (int) k + 1;
+            A[i][j] = k + 1;
             if (i == j)
                 B[i][j] = 1;
             else
@@ -52,11 +51,11 @@ int main(int argc, char **argv){
         }
     }
     
-  int pid, id, aux;
-  int segmento, status;
+  int id, aux, entrou = 0, cont;
+  int segmento;
 
   //memória compartilhada
-  segmento = shmget(IPC_PRIVATE, sizeof(int)*18, IPC_CREAT | IPC_EXCL | S_IRUSR | S_IWUSR);
+  segmento = shmget(IPC_PRIVATE, sizeof(int)*4, S_IRWXU);
   
   int **matrizSolucao = (int**)shmat(segmento, NULL, 0);
   
@@ -64,24 +63,28 @@ int main(int argc, char **argv){
       id = fork();
 
       //processo filho
-    if (id == 0){  
-        pid = wait(&status);
-          int aux2 = 0;
-            for (k = 0; k < m; k++)
-                aux2 += A[aux2][k] * B[k][aux2];
-            
-            matrizSolucao[i][j] = aux2;  
-            
-            kill(id);
-    }
-        
-      
-    
+      if (id == 0){  
+        wait(id);
+        int aux2 = 0;
+
+        for(i = 0; i < m; i++){
+          for (j = 0; j < n; j++)
+              aux2 += A[aux][j] * B[j][i];        
+
+          matrizSolucao[aux][i] = aux2; 
+          
+        }
+
+        kill(id);
 
       }else//processo pai
-        printMatriz(matrizSolucao, m, n);
-    
+        if(entrou == 0){
+          entrou++;
+          printMatriz(matrizSolucao, m, n);
+        }
   }
+
+  
 
   //libera a memória compartilhada do processo
   shmdt(matrizSolucao);
